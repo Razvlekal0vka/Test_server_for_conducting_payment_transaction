@@ -17,16 +17,33 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 
-@app.task(bind=True, ignore_result=True)
-def debug_task(self):
-    print(f'Request: {self.request!r}')
+#@app.task(bind=True, ignore_result=True)
+#def debug_task(self):
+    #print(f'Request: {self.request!r}')
 
-# celery -A payment_server worker -l info
 # celery -A payment_server flower
 
 # python manage.py makemigrations
 # python manage.py migrate
 
+# python manage.py migrate --run-syncdb
+
 # python manage.py createsuperuser
 
 # python manage.py runserver
+
+# celery -A payment_server worker --loglevel=INFO --pool=solo
+
+# celery.py
+
+from celery.schedules import schedule
+
+app.conf.beat_schedule = {
+    'check-invoice-expiration-every-second': {
+        'task': 'admin1.tasks.check_invoice_expiration',
+        'schedule': schedule(run_every=1),  # Проверять каждую секунду
+    },
+}
+
+# celery -A payment_server worker -l info
+# celery -A payment_server beat -l info
