@@ -5,7 +5,6 @@ from .tasks import check_invoice_expiration
 
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
-    exclude = ('invoice_id',)
 
     list_display = ('invoice_id', 'amount', 'created_at', 'status', 'expiration_date')
 
