@@ -1,10 +1,6 @@
 from django.db import models
 from django.utils import timezone
-import uuid
 from django.db.models import Max
-
-import time
-import random
 
 
 class Invoice(models.Model):
@@ -12,37 +8,50 @@ class Invoice(models.Model):
     invoice_id = models.CharField(max_length=100, unique=True, editable=False)
     # Сумма счета на оплату
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    # Валюта счета на оплату
+    # Time
     expiration_date = models.DateTimeField(default=timezone.now)
     # Статус счета
-    status = models.CharField(max_length=20, default='ожидает оплату')
+    status = models.CharField(max_length=20, default="ожидает оплату", editable=False)
     # Дата и время создания счета на оплату
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         if not self.invoice_id:
-            last_invoice = Invoice.objects.aggregate(Max('invoice_id'))['invoice_id__max']
+            last_invoice = Invoice.objects.aggregate(Max("invoice_id"))[
+                "invoice_id__max"
+            ]
             if last_invoice is not None:
                 self.invoice_id = str(int(last_invoice) + 1)
             else:
-                self.invoice_id = '1'
+                self.invoice_id = "1"
         super().save(*args, **kwargs)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.invoice_id
 
 
 class PaymentAttempt(models.Model):
     # Внешний ключ, связывающий попытку оплаты с определенным счетом на оплату
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='payment_attempts')
+    invoice = models.ForeignKey(
+        Invoice, on_delete=models.CASCADE, related_name="payment_attempts"
+    )
     # Уникальный идентификатор попытки оплаты
-    attempt_id = models.CharField(max_length=100, unique=True, default=uuid.uuid4, editable=False)
+    attempt_id = models.CharField(max_length=100, unique=True, editable=False)
     # Статус попытки оплаты
-    status = models.CharField(max_length=20)
+    status = models.CharField(max_length=20, default="", editable=False)
     # Вносимая сумма
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    # Дата и время создания попытки оплаты
-    created_at = models.DateTimeField(auto_now_add=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
 
-    def __str__(self):
+    def save(self, *args, **kwargs) -> None:
+        if not self.attempt_id:
+            last_attempt = PaymentAttempt.objects.aggregate(Max("attempt_id"))[
+                "attempt_id__max"
+            ]
+            if last_attempt is not None:
+                self.attempt_id = str(int(last_attempt) + 1)
+            else:
+                self.attempt_id = "1"
+        super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
         return self.attempt_id
