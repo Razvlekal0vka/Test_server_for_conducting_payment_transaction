@@ -6,9 +6,18 @@ from django.http import HttpRequest
 from django.db.models import Model
 from typing import Any
 
+from unfold.admin import ModelAdmin
+from django.contrib.admin import AdminSite
 
-@admin.register(Invoice)
-class InvoiceAdmin(admin.ModelAdmin):
+class Admin2Site(AdminSite):
+    site_header = "Admin2 Administration"
+    site_title = "Admin2 Site Admin"
+    index_title = "Welcome to Admin2 Admin"
+
+admin2_site = Admin2Site(name='admin2')
+
+
+class InvoiceAdmin(ModelAdmin):
     exclude = ("invoice_id",)
 
     list_display = (
@@ -45,8 +54,7 @@ class InvoiceAdmin(admin.ModelAdmin):
     colored_status.short_description = "Status"
 
 
-@admin.register(PaymentAttempt)
-class PaymentAttemptAdmin(admin.ModelAdmin):
+class PaymentAttemptAdmin(ModelAdmin):
     list_display = ("invoice", "status", "attempt_id", "amount")
 
     def save_model(self, request: HttpRequest, obj: Model, form: Any, change: bool) -> None:
@@ -65,3 +73,7 @@ class PaymentAttemptAdmin(admin.ModelAdmin):
         elif obj.invoice.status == "просрочен":
             obj.status = "отказ"
         super().save_model(request, obj, form, change)
+
+
+admin2_site.register(Invoice)
+admin2_site.register(PaymentAttempt)

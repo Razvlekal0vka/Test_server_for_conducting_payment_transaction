@@ -30,6 +30,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "admin1",
+    "admin2",
+    #"unfold",
     "admin_interface",
     "colorfield",
     "django_celery_results",
