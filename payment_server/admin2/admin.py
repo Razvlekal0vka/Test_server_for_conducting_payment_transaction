@@ -6,7 +6,7 @@ from django.http import HttpRequest
 from django.db.models import Model
 from typing import Any
 
-from unfold.admin import ModelAdmin
+#from unfold.admin import ModelAdmin
 from django.contrib.admin import AdminSite
 
 class Admin2Site(AdminSite):
@@ -17,7 +17,7 @@ class Admin2Site(AdminSite):
 admin2_site = Admin2Site(name='admin2')
 
 
-class InvoiceAdmin(ModelAdmin):
+class InvoiceAdmin(admin.ModelAdmin):
     exclude = ("invoice_id",)
 
     list_display = (
@@ -54,7 +54,7 @@ class InvoiceAdmin(ModelAdmin):
     colored_status.short_description = "Status"
 
 
-class PaymentAttemptAdmin(ModelAdmin):
+class PaymentAttemptAdmin(admin.ModelAdmin):
     list_display = ("invoice", "status", "attempt_id", "amount")
 
     def save_model(self, request: HttpRequest, obj: Model, form: Any, change: bool) -> None:
