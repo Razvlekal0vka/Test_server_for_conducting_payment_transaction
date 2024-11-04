@@ -30,13 +30,11 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "admin1",
-    "admin2",
-    "admin3",
-    'unfold',
-    'unfold.sites',
-    'unfold.contrib.filters',
-    'unfold.contrib.forms',
-    'unfold.contrib.import_export',
+    #'unfold',
+    #'unfold.sites',
+    #'unfold.contrib.filters',
+    #'unfold.contrib.forms',
+    #'unfold.contrib.import_export',
     "admin_interface",
     "colorfield",
     "django_celery_results",

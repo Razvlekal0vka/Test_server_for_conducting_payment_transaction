@@ -1,8 +1,7 @@
-# urls.py
-
 #from django.urls import path
-#from .sites import custom_admin_site
+#from .sites import admin3
 
 #urlpatterns = [
-    #path("admin/", custom_admin_site.urls),
+    # other URL patterns
+#    path("", admin3.urls),
 #]
