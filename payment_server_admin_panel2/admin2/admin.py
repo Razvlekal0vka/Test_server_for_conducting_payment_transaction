@@ -50,6 +50,11 @@ class InvoiceAdmin(ModelAdmin):
 class PaymentAttemptAdmin(ModelAdmin):
     list_display = ("invoice", "status", "attempt_id", "amount")
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "invoice":
+            kwargs["queryset"] = Invoice.objects.exclude(status__in=["оплачен", "просрочен"])
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
     def save_model(self, request: HttpRequest, obj: Model, form: Any, change: bool) -> None:
         print(
             f"invoice {obj.invoice}, attempt_id {obj.attempt_id}, status {obj.status}, amount {obj.amount}"
