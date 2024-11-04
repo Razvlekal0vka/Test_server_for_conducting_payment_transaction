@@ -18,8 +18,8 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
-    "check-invoice-expiration-admin1": {
-        "task": "admin1.tasks.check_invoice_expiration",
+    "check-invoice-expiration-admin2": {
+        "task": "admin2.tasks.check_invoice_expiration",
         "schedule": 60.0,
         "args": (),
     },
