@@ -4,9 +4,9 @@ from celery import Celery
 from celery.schedules import schedule
 
 # Set the default Django settings module for the 'celery' program.
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "payment_server.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "payment_server_admin_panel2.settings")
 
-app = Celery("payment_server")
+app = Celery("payment_server_admin_panel2")
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
